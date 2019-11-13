@@ -202,4 +202,34 @@ export default class AuthService {
 }
 ```
 
-5. Now allow a user to post and get data from your api. You can see a full working example of my implementation in the branch full-auth. But I advice you to first give it a try yourself.
+5. Now allow a user to post and get data from your api. You can see a full working example of my implementation in the branch full-auth. But don't cheat yet and it yourself!
+
+## Extra
+
+Here's an good example of a protected component that you can (re)use.
+
+```
+import React from "react";
+import { Route, Redirect } from "react-router-dom";
+
+// the private route is a function that will return a Route component or Redirect.
+// that expects a component, an user an other props.
+// the other props will be set in ...rest (the most important one will be the path definition (the path we see in the browser's navigation))
+const protectedRoute = ({ component: Component, user, ...rest }) => {
+  return (
+    <Route
+      {...rest}
+      render={props => {
+        //render is a function that checks if the user is passed a long. If not the private route will redirect to "/"
+        if (user) {
+          return <Component {...props} {...user} />;
+        } else {
+          return <Redirect to="/" />;
+        }
+      }}
+    />
+  );
+};
+export default protectedRoute;
+
+```
