@@ -8,7 +8,7 @@ router.post(
   uploader.single("profile-photo"),
   async (req, res, next) => {
     if (!req.file) {
-      next(new Error("No file uploaded!"));
+      res.status(500).json({ message: "Please include a photo" });
       return;
     }
     try {

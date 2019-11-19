@@ -43,7 +43,7 @@ export default class App extends Component {
   logout = async () => {
     //destroy session.
     try {
-      const loggedOut = await this.authService.logout();
+      await this.authService.logout();
     } catch (err) {
       console.log(err);
     } finally {
@@ -59,7 +59,7 @@ export default class App extends Component {
       <div className="App">
         <NavBar user={this.state.user} logout={this.logout} />
         <Switch>
-          <Route path="/" component={HigherOrder} />
+          <Route exact path="/" component={HigherOrder} />
           <Route
             path="/login"
             render={props => (

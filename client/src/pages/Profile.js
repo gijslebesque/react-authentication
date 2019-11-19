@@ -17,9 +17,11 @@ export default class Profile extends Component {
       const data = new FormData(this.form.current);
       const user = await this.uploadService.uploadProfile(data);
       this.props.setUserState(user);
+      this.setState({ err: null });
     } catch (err) {
       debugger;
-      this.setState({ err });
+      const { message } = err.response.data;
+      this.setState({ err: message });
     }
   };
 
