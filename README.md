@@ -56,6 +56,27 @@ Instead of ComponentDidMount, ComponentDidUpdate and ComponentWillUnmount we can
 
 When we need, for example, some user data after a component has mounted.
 
+Before, to get user data in we would do it like so:
+
+```
+  componentDidMount = async () => {
+    let user;
+    try {
+      //Making the actual API call.
+      user = await this.authService.isLoggedIn();
+    } catch (err) {
+      user = null;
+    } finally {
+      //Irregardless of the result we want to set state.
+      this.setUserState(user);
+    }
+  };
+```
+
+With useEffect we need to make some small adjustments. React doesn't want the callback to be asychronous, because it should return a 'clean up function' if necessary. An async functions, instead will return a promise.
+
+So we can refactor componendDidMount to:
+
 ```
   useEffect(() => {
     const getUser = async () => {
@@ -74,3 +95,8 @@ When we need, for example, some user data after a component has mounted.
   }, []);
 };
 ```
+
+Notice that the function declared inside useEffect, is async, not the callback of useEffect.
+And that we still need to call getUser.
+
+Also note the second paramater (line 95) of useEffect is an empty array. Since we're updating the state, useEffect will be called again. With adding the empty array (dependcy array) we avoid ending up in an infinite loop.
