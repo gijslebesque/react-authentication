@@ -11,7 +11,7 @@ const protectedRoute = ({ component: Component, user, ...rest }) => {
       render={props => {
         //render is a function that checks if the user is passed a long. If not the private route will redirect to "/"
         if (user) {
-          return <Component {...props} {...user} />;
+          return <Component {...props} user={user} {...rest} />;
         } else {
           return <Redirect to="/" />;
         }

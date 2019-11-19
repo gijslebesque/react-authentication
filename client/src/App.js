@@ -73,6 +73,7 @@ export default class App extends Component {
           <PrivateRoute
             path="/profile"
             user={this.state.user}
+            setUserState={this.setUserState}
             component={Profile}
           />
         </Switch>
