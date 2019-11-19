@@ -9,28 +9,28 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NavBar from "./components/NavBar";
 import HigherOrder from "./pages/HigherOrder";
+const authService = new AuthService();
 
 export default function App() {
-  const authService = new AuthService();
   const [state, setState] = useState({ user: null, isLoadingUser: true });
+
   //Component did mount is now use effect.
   //Don't forget the second argument needs to be an empty array, so app won't get into an infinite loop.
   useEffect(() => {
+    const getUser = async () => {
+      let user;
+      try {
+        //Making the actual API call.
+        user = await authService.isLoggedIn();
+      } catch (err) {
+        user = null;
+      } finally {
+        //Irregardless of the result we want to set state.
+        setUserState(user);
+      }
+    };
     getUser();
   }, []);
-
-  const getUser = async () => {
-    let user;
-    try {
-      //Making the actual API call.
-      user = await authService.isLoggedIn();
-    } catch (err) {
-      user = null;
-    } finally {
-      //Irregardless of the result we want to set state.
-      setUserState(user);
-    }
-  };
 
   const setUserState = user => {
     // If user is loggedIn state will be set with user,
