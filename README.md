@@ -4,8 +4,9 @@ With React hooks we no longer need class components. The benefits of is that it 
 
 This repo is using two of the most common hooks.
 
-1. useState
-   The useState hook is replacing the state of a class component.
+## 1. useState
+
+The useState hook is replacing the state of a class component.
 
 Take this simple component which will only add one to the counter state on a button click.
 
@@ -50,7 +51,7 @@ const App = ( ) => {
 }
 ```
 
-2. useEffect
+## 2. useEffect
 
 Instead of ComponentDidMount, ComponentDidUpdate and ComponentWillUnmount we can use the useEffect hook.
 
