@@ -58,3 +58,8 @@ nav a {
     transform: rotate(360deg);
   }
 }
+
+.container {
+  width: 500px;
+  margin: auto;
+}

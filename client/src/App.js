@@ -8,6 +8,7 @@ import Loader from "./components/Loader";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NavBar from "./components/NavBar";
+import HigherOrder from "./pages/HigherOrder";
 
 export default class App extends Component {
   constructor() {
@@ -58,6 +59,7 @@ export default class App extends Component {
       <div className="App">
         <NavBar user={this.state.user} logout={this.logout} />
         <Switch>
+          <Route path="/" component={HigherOrder} />
           <Route
             path="/login"
             render={props => (
