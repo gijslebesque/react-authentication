@@ -6,6 +6,7 @@ import Profile from "./pages/Profile";
 import PrivateRoute from "./components/PrivateRoute";
 import Loader from "./components/Loader";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import NavBar from "./components/NavBar";
 
 export default class App extends Component {
@@ -61,6 +62,12 @@ export default class App extends Component {
             path="/login"
             render={props => (
               <Login {...props} setUserState={this.setUserState} />
+            )}
+          />
+          <Route
+            path="/register"
+            render={props => (
+              <Register {...props} setUserState={this.setUserState} />
             )}
           />
           <PrivateRoute

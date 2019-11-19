@@ -11,9 +11,10 @@ router.post("/register", async (req, res, next) => {
 
   try {
     //encrpt password
-    const newUser = await User.create(req.body);
+    const user = await User.create(req.body);
     // dont send password back
-    res.status(200).json(newUser);
+    req.session.user = user;
+    res.status(200).json(user);
   } catch (err) {
     res.status(500).json({ message: "Wops something went terribly awry!" });
   }
