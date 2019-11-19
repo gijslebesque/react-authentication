@@ -1,56 +1,46 @@
-import React, { Component, createRef } from "react";
+import React, { createRef, useState } from "react";
 import UploadService from "../api/uploadService";
 
-export default class Profile extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      err: null
-    };
-    this.form = createRef();
-    this.uploadService = new UploadService();
-  }
+export default function Profile({ user, setUserState }) {
+  const uploadService = new UploadService();
+  const form = createRef();
 
-  submitHandler = async e => {
+  const [err, setError] = useState(null);
+
+  const submitHandler = async e => {
     e.preventDefault();
     try {
-      const data = new FormData(this.form.current);
-      const user = await this.uploadService.uploadProfile(data);
-      this.props.setUserState(user);
-      this.setState({ err: null });
+      const data = new FormData(form.current);
+      const user = await uploadService.uploadProfile(data);
+      setUserState(user);
+      setError(null);
     } catch (err) {
       debugger;
       const { message } = err.response.data;
-      this.setState({ err: message });
+      setError(message);
     }
   };
 
-  render() {
-    return (
-      <div>
-        <h1>Hi, {this.props.user.username}</h1>
+  return (
+    <div>
+      <h1>Hi, {user.username}</h1>
 
-        <form
-          onSubmit={this.submitHandler}
-          ref={this.form}
-          encType="multipart/form-data"
-        >
-          <input
-            type="file"
-            name="profile-photo"
-            placeholder="upload your profile"
-          />
-          <input type="text" placeholder="Add a caption!" name="caption" />
-          <button type="submit">Upload photo</button>
-          {this.state.err && <p>{this.state.err}</p>}
-        </form>
-        {this.props.user.profilePhoto && (
-          <div>
-            <h1>{this.props.user.profilePhoto.caption}</h1>
-            <img src={this.props.user.profilePhoto.imageUrl} alt="" />
-          </div>
-        )}
-      </div>
-    );
-  }
+      <form onSubmit={submitHandler} ref={form} encType="multipart/form-data">
+        <input
+          type="file"
+          name="profile-photo"
+          placeholder="upload your profile"
+        />
+        <input type="text" placeholder="Add a caption!" name="caption" />
+        <button type="submit">Upload photo</button>
+        {err && <p>{err}</p>}
+      </form>
+      {user.profilePhoto && (
+        <div>
+          <h1>{user.profilePhoto.caption}</h1>
+          <img src={user.profilePhoto.imageUrl} alt="" />
+        </div>
+      )}
+    </div>
+  );
 }

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import AuthService from "./api/authService";
 import { Switch, Route } from "react-router-dom";
@@ -10,76 +10,67 @@ import Register from "./pages/Register";
 import NavBar from "./components/NavBar";
 import HigherOrder from "./pages/HigherOrder";
 
-export default class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      user: null,
-      isLoadingUser: true
-    };
-    this.authService = new AuthService();
-  }
+export default function App() {
+  const authService = new AuthService();
+  const [state, setState] = useState({ user: null, isLoadingUser: true });
+  //Component did mount is now use effect.
+  //Don't forget the second argument needs to be an empty array, so app won't get into an infinite loop.
+  useEffect(() => {
+    getUser();
+  }, []);
 
-  //Every time starts check if user session exists and retrieve user data.
-  componentDidMount = async () => {
+  const getUser = async () => {
     let user;
     try {
       //Making the actual API call.
-      user = await this.authService.isLoggedIn();
+      user = await authService.isLoggedIn();
     } catch (err) {
       user = null;
     } finally {
       //Irregardless of the result we want to set state.
-      this.setUserState(user);
+      setUserState(user);
     }
   };
 
-  setUserState = user => {
+  const setUserState = user => {
     // If user is loggedIn state will be set with user,
     // otherwise user will be null.
-    this.setState({ user, isLoadingUser: false, err: null });
+    setState({ user, isLoadingUser: false });
   };
 
-  logout = async () => {
+  const logout = async () => {
     //destroy session.
     try {
-      await this.authService.logout();
+      await authService.logout();
     } catch (err) {
       console.log(err);
     } finally {
-      this.setState({ user: null });
+      setUserState(null);
     }
   };
 
-  render() {
-    // Initially we do not know yet whether an user is logged in or not so we just return a loader.
-    if (this.state.isLoadingUser)
-      return <Loader className="full-screen-loader" />;
-    return (
-      <div className="App">
-        <NavBar user={this.state.user} logout={this.logout} />
-        <Switch>
-          <Route exact path="/" component={HigherOrder} />
-          <Route
-            path="/login"
-            render={props => (
-              <Login {...props} setUserState={this.setUserState} />
-            )}
-          />
-          <Route
-            path="/register"
-            render={props => (
-              <Register {...props} setUserState={this.setUserState} />
-            )}
-          />
-          <PrivateRoute
-            path="/profile"
-            user={this.state.user}
-            setUserState={this.setUserState}
-            component={Profile}
-          />
-        </Switch>
-      </div>
-    );
-  }
+  // Initially we do not know yet whether an user is logged in or not so we just return a loader.
+  if (state.isLoadingUser) return <Loader className="full-screen-loader" />;
+  return (
+    <div className="App">
+      <NavBar user={state.user} logout={logout} />
+      <Switch>
+        <Route exact path="/" component={HigherOrder} />
+        <Route
+          path="/login"
+          render={props => <Login {...props} setUserState={setUserState} />}
+        />
+        <Route
+          path="/register"
+          render={props => <Register {...props} setUserState={setUserState} />}
+        />
+        <PrivateRoute
+          path="/profile"
+          user={state.user}
+          setUserState={setUserState}
+          component={Profile}
+        />
+      </Switch>
+    </div>
+  );
 }
