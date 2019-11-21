@@ -1,28 +1,32 @@
-import React, { useState } from "react";
+import React, { useReducer } from "react";
 import AuthService from "../api/authService";
+import { authFormReducer as reducer } from "../reducers";
 
 export default function Login({ setUserState, history }) {
   const authService = new AuthService();
-  const [err, setError] = useState(null);
 
-  const [inputFields, setUser] = useState({ username: "", password: "" });
+  const [state, dispatch] = useReducer(reducer, {
+    err: null,
+    username: "",
+    password: ""
+  });
+
   const onChangeHandler = e => {
     const { name, value } = e.target;
-    setUser({ ...inputFields, [name]: value });
+    dispatch({ type: name, payload: value });
   };
 
   const submitHandler = async e => {
     e.preventDefault();
     try {
-      const user = await authService.login(inputFields);
+      const user = await authService.login(state);
       setUserState(user);
       history.push("/profile");
     } catch (err) {
       const { message } = err.response.data;
-      setError(message);
+      dispatch({ type: "error", payload: message });
     }
   };
-
   return (
     <div>
       <h1>Login!</h1>
@@ -41,7 +45,7 @@ export default function Login({ setUserState, history }) {
         />
         <button type="submit">Login!</button>
       </form>
-      {err && <p className="error">{err}</p>}
+      {state.err && <p className="error">{state.err}</p>}
     </div>
   );
 }
