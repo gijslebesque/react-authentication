@@ -21,7 +21,9 @@ export default class Login extends Component {
     e.preventDefault();
     try {
       const user = await this.authService.login(this.state);
+
       this.props.setUserState(user);
+
       this.props.history.push("/profile");
     } catch (err) {
       const { message } = err.response.data;

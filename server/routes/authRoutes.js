@@ -4,6 +4,7 @@ const User = require("../models/User");
 
 router.post("/register", async (req, res, next) => {
   const { username, password } = req.body;
+
   if (!username || !password) {
     res.status(400).json({ message: "Please provide credentials" });
     return false;
@@ -11,7 +12,7 @@ router.post("/register", async (req, res, next) => {
 
   try {
     //encrpt password
-    const user = await User.create(req.body);
+    const user = await User.create({ username, password });
     // dont send password back
     req.session.user = user;
     res.status(200).json(user);

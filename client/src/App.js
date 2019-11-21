@@ -50,7 +50,6 @@ export default class App extends Component {
       this.setState({ user: null });
     }
   };
-
   render() {
     // Initially we do not know yet whether an user is logged in or not so we just return a loader.
     if (this.state.isLoadingUser)
@@ -60,12 +59,16 @@ export default class App extends Component {
         <NavBar user={this.state.user} logout={this.logout} />
         <Switch>
           <Route exact path="/" component={HigherOrder} />
+
+          <Route path="/login" component={Login} />
+
           <Route
             path="/login"
             render={props => (
               <Login {...props} setUserState={this.setUserState} />
             )}
           />
+
           <Route
             path="/register"
             render={props => (

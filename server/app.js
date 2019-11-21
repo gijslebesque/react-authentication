@@ -6,6 +6,8 @@ const logger = require("morgan");
 
 const app = express();
 
+const session = require("express-session");
+const MongoStore = require("connect-mongo")(session);
 const mongoose = require("mongoose");
 const cors = require("cors");
 
@@ -19,9 +21,6 @@ mongoose
   .catch(err => {
     console.log(err);
   });
-
-const session = require("express-session");
-const MongoStore = require("connect-mongo")(session);
 
 app.use(
   session({
@@ -39,10 +38,6 @@ app.use(
     credentials: true
   })
 );
-
-// view engine setup
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "jade");
 
 app.use(logger("dev"));
 app.use(express.json());

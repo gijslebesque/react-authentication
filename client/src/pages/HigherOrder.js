@@ -6,7 +6,7 @@ let userObj = {
 
 userObj = null;
 
-export default function BaseComp() {
+export default function App() {
   return (
     <div className="container">
       <h1>Higher order components</h1>
@@ -20,10 +20,9 @@ export default function BaseComp() {
         Only we pass another component as a prop.
       </p>
 
-      <HigherOrderFunction
-        theComponentToRender={RegularComponent}
-        user={userObj}
-      />
+      <HigherOrderFunction theComponentToRender={Profile} user={userObj} />
+
+      <HigherOrderFunction theComponentToRender={Profile} user={userObj} />
     </div>
   );
 }
@@ -37,6 +36,6 @@ function HigherOrderFunction({
   else return null;
 }
 
-function RegularComponent({ user }) {
+function Profile({ user }) {
   return <p>hi, {user.name} </p>;
 }
